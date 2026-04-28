@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createOrder } from "../services/api";
+import { toast } from "react-toastify";
 
 const EMPTY_ITEM = { name: "", qty: 1, price: 0 };
 
@@ -64,7 +65,8 @@ export default function OrderForm({ onCreated, onClose }) {
       onCreated(res); // ✅ fixed
       onClose();
     } catch (e) {
-      alert("Failed to create order");
+      // alert("Failed to create order");
+      toast.error("Failed to create order.");
     } finally {
       setLoading(false);
     }

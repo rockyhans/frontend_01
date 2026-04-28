@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { deleteOrder, updateOrder } from "../services/api";
+import { toast } from "react-toastify";
 
 const STATUS_CONFIG = {
   pending: {
@@ -40,15 +41,18 @@ export default function OrderItem({ order, onDelete, onUpdate }) {
   const [loading, setLoading] = useState(false);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
-
+  
   const handleDelete = async () => {
-    if (!window.confirm("Delete this order?")) return;
+    // if (!window.confirm("Delete this order?")) return;
+    toast.info("Order deleted.");
+    
     setLoading(true);
     try {
       await deleteOrder(order._id);
       onDelete(order._id);
     } catch (e) {
-      alert("Delete failed");
+      // alert("Delete failed");
+      toast.error("Delete failed.");
     } finally {
       setLoading(false);
     }
@@ -63,7 +67,8 @@ export default function OrderItem({ order, onDelete, onUpdate }) {
       const res = await updateOrder(order._id, { status: newStatus });
       onUpdate(res);
     } catch {
-      alert("Update failed");
+      // alert("Update failed");
+      toast.error("Update failed.");
       onUpdate(order);
     }
   };
